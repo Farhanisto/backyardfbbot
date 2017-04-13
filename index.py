@@ -124,7 +124,7 @@ def buy_list_template(sender):
                     "subtitle": "See all our colors",
                     "default_action": {
                         "type": "web_url",
-                        "url": 'https://6f5fcdf0.ngrok.io/add?user='+str(user[0]),
+                        "url": 'https://backyardsales.herokuapp.com//add?user='+str(user[0]),
 
                     },
                     "buttons": [
