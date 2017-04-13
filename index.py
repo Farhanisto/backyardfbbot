@@ -211,9 +211,6 @@ def handle_verification():
     return request.args.get('hub.challenge', '')
   else:
     print "Verification failed!"
-    images_list = os.listdir('./static/img')
-    print images_list
-    return render_template('index.html',images_list=images_list)
 
 @app.route('/', methods=['POST'])
 def handle_messages():
