@@ -210,7 +210,7 @@ def handle_verification():
     print "Verification successful!"
     return request.args.get('hub.challenge', '')
   else:
-    print "Verification failed!"
+    return "Verification failed!"
 
 @app.route('/', methods=['POST'])
 def handle_messages():
