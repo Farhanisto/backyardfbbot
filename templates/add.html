@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% from "form_macros.html" import render_field %}
+
+{%block login%}<li><a href="{{url_for('login')}}">logout</a></li>{%endblock%}
+
+
+
+
+
+{%block content %}
+
+<form action="" method="POST" enctype="multipart/form-data">
+<article>
+{{form.hidden_tag()}}
+
+<table>
+	{{render_field(form.comment,size=50)}}
+
+
+
+	<tr>
+		<td><button type='submit' value='submit'>submit</button></td>
+	</tr>
+</table>
+
+</article>
+
+</form>
+
+{%endblock%}
