@@ -110,56 +110,58 @@ def buy_list_template(sender):
         print photo
         print description
         print user
-        return {
-            "recipient": {
-                "id": sender
-            }, "message": {
-                "attachment": {
-                    "type": "template",
-                    "payload": {
-                        "template_type": "generic",
-                        "elements": [
-                            {
-                                "title": str(description[0]),
-                                "image_url": str(photo[0]),
-                                "subtitle": "Message the owner",
-                                "default_action": {
-                                    "type": "web_url",
-                                    "url": 'https://7f6219d8.ngrok.io/add?user=' + str(user[0]),
-
-                                },
-                                "buttons": [
-                                    {
-                                        "title": "View",
+        if len(photo)>=2:
+            return {
+                "recipient": {
+                    "id": sender
+                }, "message": {
+                    "attachment": {
+                        "type": "template",
+                        "payload": {
+                            "template_type": "generic",
+                            "elements": [
+                                {
+                                    "title": str(description[0]),
+                                    "image_url": str(photo[0]),
+                                    "subtitle": "Message the owner",
+                                    "default_action": {
                                         "type": "web_url",
-                                        "url": str(photo[0]),
+                                        "url": 'https://7f6219d8.ngrok.io/add?user=' + str(user[0]),
 
-                                    }
-                                ]
-                            },
-                            {
-                                "title": "Classic White T-Shirt",
-                                "image_url": "https://peterssendreceiveapp.ngrok.io/img/white-t-shirt.png",
-                                "subtitle": "100% Cotton, 200% Comfortable",
-                                "default_action": {
-                                    "type": "web_url",
-                                    "url": "https://peterssendreceiveapp.ngrok.io/view?item=100",
+                                    },
+                                    "buttons": [
+                                        {
+                                            "title": "View",
+                                            "type": "web_url",
+                                            "url": str(photo[0]),
 
+                                        }
+                                    ]
                                 },
-                                "buttons": [
-                                    {
-                                        "title": "Shop Now",
+                                {
+                                    "title": str(description[1]),
+                                    "image_url":str(photo[1]) ,
+                                    "subtitle": "message the owner",
+                                    "default_action": {
                                         "type": "web_url",
-                                        "url": "https://peterssendreceiveapp.ngrok.io/shop?item=100",
+                                        "url": "https://peterssendreceiveapp.ngrok.io/view?item=100",
 
-                                    }
-                                ]
-                            }
-                        ]
+                                    },
+                                    "buttons": [
+                                        {
+                                            "title": "Shop Now",
+                                            "type": "web_url",
+                                            "url": "https://peterssendreceiveapp.ngrok.io/shop?item=100",
+
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
                     }
                 }
             }
-        }
+
     except IndexError:
         print "no items on sale currently. Try again later"
         farhan(GATE, sender,"no items on sale currently. Try again later")
