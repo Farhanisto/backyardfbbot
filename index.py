@@ -23,11 +23,11 @@ db=SQLAlchemy(app)
 #models class
 class Backyard(db.Model):
     id=db.Column(db.Integer,primary_key=True)
-    photo_url=db.Column(db.String(300))
-    date=db.Column(db.DateTime,default=datetime.utcnow)
-    description=db.Column(db.String(300))
-    location=db.Column(db.String(300))
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    photo_url=db.Column(db.String(300),nullable=False)
+    date=db.Column(db.DateTime,default=datetime.utcnow,nullable=False)
+    description=db.Column(db.String(300),nullable=False)
+    location=db.Column(db.String(300),nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'),nullable=False)
 
     @staticmethod
     def newest(num):
@@ -42,7 +42,7 @@ class Backyard(db.Model):
 
 class User(db.Model):
     id=db.Column(db.Integer,primary_key=True)
-    user=db.Column(db.String(80),unique=True)
+    user=db.Column(db.String(80),unique=True,nullable=False)
     email=db.Column(db.String(80))
     backyards = db.relationship('Backyard', backref='user', lazy='dynamic')
 
@@ -96,69 +96,75 @@ def button_template(sender):
 }
 
 def buy_list_template(sender):
-    by=Backyard.newest(5)
-    print "hellllllo"
-    print by
-    photo=[]
-    description=[]
-    user=[]
-    for data in by:
-        photo.append(data.photo_url)
-        description.append(data.description)
-        user.append(data.user.user)
-    print photo
-    print description
-    print user
-    return {
-  "recipient":{
-    "id":sender
-  }, "message": {
-    "attachment": {
-        "type": "template",
-        "payload": {
-            "template_type": "generic",
-            "elements": [
-                {
-                    "title": str(description[0]),
-                    "image_url":  str(photo[0]),
-                    "subtitle": "See all our colors",
-                    "default_action": {
-                        "type": "web_url",
-                        "url": 'https://6f5fcdf0.ngrok.io/add?user='+str(user[0]),
+    try:
+        by = Backyard.newest(5)
+        print "hellllllo"
+        print by
+        photo = []
+        description = []
+        user = []
+        for data in by:
+            photo.append(data.photo_url)
+            description.append(data.description)
+            user.append(data.user.user)
+        print photo
+        print description
+        print user
+        return {
+            "recipient": {
+                "id": sender
+            }, "message": {
+                "attachment": {
+                    "type": "template",
+                    "payload": {
+                        "template_type": "generic",
+                        "elements": [
+                            {
+                                "title": str(description[0]),
+                                "image_url": str(photo[0]),
+                                "subtitle": "Message the owner",
+                                "default_action": {
+                                    "type": "web_url",
+                                    "url": 'https://7f6219d8.ngrok.io/add?user=' + str(user[0]),
 
-                    },
-                    "buttons": [
-                        {
-                            "title": "View",
-                            "type": "web_url",
-                            "url": str(photo[0]),
+                                },
+                                "buttons": [
+                                    {
+                                        "title": "View",
+                                        "type": "web_url",
+                                        "url": str(photo[0]),
 
-                        }
-                    ]
-                },
-                {
-                    "title": "Classic White T-Shirt",
-                    "image_url": "https://peterssendreceiveapp.ngrok.io/img/white-t-shirt.png",
-                    "subtitle": "100% Cotton, 200% Comfortable",
-                    "default_action": {
-                        "type": "web_url",
-                        "url": "https://peterssendreceiveapp.ngrok.io/view?item=100",
+                                    }
+                                ]
+                            },
+                            {
+                                "title": "Classic White T-Shirt",
+                                "image_url": "https://peterssendreceiveapp.ngrok.io/img/white-t-shirt.png",
+                                "subtitle": "100% Cotton, 200% Comfortable",
+                                "default_action": {
+                                    "type": "web_url",
+                                    "url": "https://peterssendreceiveapp.ngrok.io/view?item=100",
 
-                    },
-                    "buttons": [
-                        {
-                            "title": "Shop Now",
-                            "type": "web_url",
-                            "url": "https://peterssendreceiveapp.ngrok.io/shop?item=100",
+                                },
+                                "buttons": [
+                                    {
+                                        "title": "Shop Now",
+                                        "type": "web_url",
+                                        "url": "https://peterssendreceiveapp.ngrok.io/shop?item=100",
 
-                        }
-                    ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
                 }
-            ]
+            }
         }
-    }
-                  }
-    }
+    except IndexError:
+        print "no items on sale currently. Try again later"
+        farhan(GATE, sender,"no items on sale currently. Try again later")
+
+
 
 
 def location_quick_reply(sender):
