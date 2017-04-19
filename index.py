@@ -126,14 +126,14 @@ def buy_list_template(sender):
                                     "subtitle": "Message the owner",
                                     "default_action": {
                                         "type": "web_url",
-                                        "url": 'https://7f6219d8.ngrok.io/add?user=' + str(user[0]),
+                                        "url": str(photo[0]),
 
                                     },
                                     "buttons": [
                                         {
-                                            "title": "View",
+                                            "title": "Message the owner",
                                             "type": "web_url",
-                                            "url": str(photo[0]),
+                                            "url": 'https://backyardsales.herokuapp.com/add?user=' + str(user[0]),
 
                                         }
                                     ]
@@ -144,14 +144,14 @@ def buy_list_template(sender):
                                     "subtitle": "message the owner",
                                     "default_action": {
                                         "type": "web_url",
-                                        "url": "https://peterssendreceiveapp.ngrok.io/view?item=100",
+                                        "url": str(photo[1]),
 
                                     },
                                     "buttons": [
                                         {
-                                            "title": "Shop Now",
+                                            "title": "Message the owner",
                                             "type": "web_url",
-                                            "url": "https://peterssendreceiveapp.ngrok.io/shop?item=100",
+                                            "url": 'https://backyardsales.herokuapp.com/add?user=' + str(user[0]),
 
                                         }
                                     ]
@@ -164,7 +164,7 @@ def buy_list_template(sender):
 
     except IndexError:
         print "no items on sale currently. Try again later"
-        farhan(GATE, sender,"no items on sale currently. Try again later")
+        farhan(GATE, sender,"no items on sale currently. please try again later")
 
 
 
@@ -343,7 +343,7 @@ def farhan(token, recipient,text):
                           "message": {"text": text.encode('unicode_escape')}
                       }),
                       headers={'Content-type': 'application/json'})
-
+#Monitor app usage.
 farhan(GATE,'1089993001113019','hello farhan bot')
 
 
