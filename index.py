@@ -7,7 +7,14 @@ from Forms import BackyardForm
 from flask_sqlalchemy import SQLAlchemy
 import os
 from sqlalchemy import desc
+import urllib3.contrib.pyopenssl
+import certifi
+import urllib3
 
+urllib3.contrib.pyopenssl.inject_into_urllib3()
+http = urllib3.PoolManager(
+    cert_reqs='CERT_REQUIRED',
+   ca_certs=certifi.where())
 
 baseddir=os.path.abspath(os.path.dirname(__file__))
 UPLOAD_FOLDER = os.path.abspath('static/img')
@@ -133,7 +140,7 @@ def buy_list_template(sender):
                                         {
                                             "title": "Message the owner",
                                             "type": "web_url",
-                                            "url": 'https://backyardsales.herokuapp.com/add?user=' + str(user[0]),
+                                            "url": ' https://5e3e867a.ngrok.io/add?user=' + str(user[0])+"sender="+sender,
 
                                         }
                                     ]
@@ -201,6 +208,8 @@ def add():
 
     form=BackyardForm()
     recipient=request.args.get('user')
+    sender=request.args.get('sender')
+    print sender
     if form.validate_on_submit():
         comment = form.comment.data
         farhan(GATE,recipient,comment)
