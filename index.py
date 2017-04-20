@@ -140,7 +140,7 @@ def buy_list_template(sender):
                                         {
                                             "title": "Message the owner",
                                             "type": "web_url",
-                                            "url": ' https://5e3e867a.ngrok.io/add?user=' + str(user[0])+"sender="+sender,
+                                            "url": ' https://backyardsales.herokuapp.com/add?user={} &sender={}'.format(str(user[0]),sender),
 
                                         }
                                     ]
@@ -158,7 +158,7 @@ def buy_list_template(sender):
                                         {
                                             "title": "Message the owner",
                                             "type": "web_url",
-                                            "url": 'https://backyardsales.herokuapp.com/add?user=' + str(user[0]),
+                                            "url": ' https://backyardsales.herokuapp.com/add?user={} &sender={}'.format(str(user[1]),sender),
 
                                         }
                                     ]
@@ -171,7 +171,7 @@ def buy_list_template(sender):
 
     except IndexError:
         print "no items on sale currently. Try again later"
-        farhan(GATE, sender,"no items on sale currently. please try again later")
+        send_message(GATE, sender,"no items on sale currently. please try again later")
 
 
 
@@ -208,11 +208,12 @@ def add():
 
     form=BackyardForm()
     recipient=request.args.get('user')
-    sender=request.args.get('sender')
+    sender = request.args.get('sender')
     print sender
+
     if form.validate_on_submit():
         comment = form.comment.data
-        farhan(GATE,recipient,comment)
+        clientToOwner(GATE,recipient,comment,sender)
         print 'save comment to db'
         flash("Your message has been sent")
 
@@ -344,16 +345,31 @@ def errorHandler(e):
 
 #function to send message to user automatically
 
-def farhan(token, recipient,text):
-    r = requests.post("https://graph.facebook.com/v2.6/me/messages",
-                      params={"access_token": token},
-                      data=json.dumps({
-                          "recipient": {"id": recipient},
-                          "message": {"text": text.encode('unicode_escape')}
-                      }),
-                      headers={'Content-type': 'application/json'})
-#Monitor app usage.
-farhan(GATE,'1089993001113019','hello farhan bot')
+def clientToOwner(token, recipient,text,sender):
+    payload={
+        "recipient": {
+            "id": recipient
+        },
+        "message": {
+            "attachment": {
+                "type": "template",
+                "payload": {
+                    "template_type": "button",
+                    "text": text,
+                    "buttons": [
+                                        {
+                                            "title": "Reply",
+                                            "type": "web_url",
+                                            "url": ' https://backyardsales.herokuapp.com/add?user={} &sender={}'.format(sender,recipient),
+
+                                        }
+
+                    ]
+                }
+            }
+        }
+    }
+    r = requests.post('https://graph.facebook.com/v2.6/me/messages/?access_token=' + GATE, json=payload)
 
 
 

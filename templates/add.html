@@ -1,6 +1,9 @@
 
 {% from "form_macros.html" import render_field %}
 
+
+
+
 <form action="" method="POST" enctype="multipart/form-data">
 <article>
 {{form.hidden_tag()}}
@@ -13,6 +16,21 @@
 	<tr>
 		<td><button type='submit' value='submit'>submit</button></td>
 	</tr>
+	<section>
+                        <h2>Send Message to the owner of this item.</h2>
+                        {%with messages=get_flashed_messages()%}
+                        {%if messages%}
+                        <ul>
+                            {% for message in messages%}
+                            <li > {{message}}</li>
+                            {%endfor%}
+
+                        </ul>
+                        {%endif%}
+                        {%endwith%}
+
+
+</section>
 </table>
 
 </article>
